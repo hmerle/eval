@@ -87,8 +87,6 @@ function App() {
       </div>)
       }
       {error ? <div>Une erreur s'est produite, merci de patienter avant de réessayer. Si l'erreur persiste, merci de contacter le support</div> : ""}
-      <br />
-      <footer>Application React réalisée par Hugo MERLE, élève en M2 à l'ISEN Nantes</footer>
     </>
   )
 }
