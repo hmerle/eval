@@ -34,10 +34,10 @@ function App() {
         setWeather("nuageux");
         break;
       case 'stormy':
-        setWeather("orageux");
+        setWeather("orageux, préparez un parapluie");
         break;
       case 'windy':
-        setWeather("venteux");
+        setWeather("venteux, prenez un manteau");
         break;
       case 'rainy':
         setWeather("pluvieux, prenez un parapluie");
@@ -75,18 +75,22 @@ function App() {
         <button onClick={localize}>Me localiser</button>
       </div>
       {data ? 
-      (<div className="card">
+      (<div>
         <h3>Météo à {data.city}</h3>
         <hr />
         <span style={{fontSize:"large"}}><strong>{data.temperature}°C</strong></span>
         <p>Le temps est {weather}</p>
       </div>)
       : 
-        (<div className="card">
+        (<div>
         <h3>Aucune ville sélectionnée</h3>
       </div>)
       }
       {error ? <div>Une erreur s'est produite, merci de patienter avant de réessayer. Si l'erreur persiste, merci de contacter le support</div> : ""}
+      <footer>
+        <p>Application React réalisée par Hugo MERLE, élève en M2 à l'<a href='https://isen-nantes.fr'>ISEN Nantes</a></p>
+        <p><i>Le code source peut être retrouvé sur <a href='https://github.com/hmerle/eval'>Github</a></i></p>
+      </footer>
     </>
   )
 }
