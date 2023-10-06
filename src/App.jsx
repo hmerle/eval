@@ -26,22 +26,22 @@ function App() {
     .catch((error) => setError(true));
     switch(data.condition){
       case 'sunny':
-        setWeather("ensoleillé, des vêtements légers sont recommandés");
+        setWeather(["ensoleillé", "Des vêtements légers sont recommandés"]);
         break;
       case 'cloudy':
-        setWeather("nuageux, un gilet ou un pull peut s'avérer utile");
+        setWeather(["nuageux", "Un gilet ou un pull peut s'avérer utile"]);
         break;
       case 'stormy':
-        setWeather("orageux");
+        setWeather(["orageux", "Ne pas tarder à rentrer"]);
         break;
       case 'windy':
-        setWeather("venteux, un manteau est conseillé");
+        setWeather(["venteux", "Un manteau est conseillé"]);
         break;
       case 'rainy':
-        setWeather("pluvieux, prenez un parapluie");
+        setWeather(["pluvieux", "Prenez un parapluie"]);
         break;
       default :
-        setWeather("inconnu, veuillez réessayer dans quelques secondes");
+        setWeather(["inconnu", "Veuillez réessayer dans quelques secondes"]);
         break;
     }
   }
@@ -76,8 +76,11 @@ function App() {
       (<div>
         <h3>Météo à <span style={{textTransform: 'capitalize'}}>{data.city}</span> · France</h3>
         <hr />
-        <span style={{fontSize:"large"}}><strong>{data.temperature}°C</strong></span>
-        <p>Le temps est {weather}</p>
+        <p className='weather' style={{textTransform: 'capitalize'}}>
+          <strong>{weather[0]} - </strong>
+          <strong>{data.temperature}°C</strong> 
+        </p>
+        <p>{weather[1]}</p>
       </div>)
       : 
         (<div>
