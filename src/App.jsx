@@ -1,34 +1,86 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [weather, setWeather] = useState("");
+
+  const [city, setCity] = useState("");
+
+  const [data, setData] = useState("");
+
+  const inputRef = useRef("");
+
+  function handleInput(event){
+    if (event.key === 'Enter' && event.target.value !== "") {
+      searchWeather(event.target.value);
+      event.currentTarget.value = "";
+    }
+  }
+
+  function searchWeather(city){
+    fetch("https://jb03dcnv74.execute-api.eu-west-1.amazonaws.com/Prod/weather/"+city)
+    .then((response) => response.json())
+    .then((json) => setData(json))
+    .catch((error) => console.error(error));
+    switch(data.condition){
+      case 'sunny':
+        setWeather("ensoleillé, sortez léger");
+        break;
+      case 'cloudy':
+        setWeather("nuageux");
+        break;
+      case 'stormy':
+        setWeather("orageux");
+        break;
+      case 'windy':
+        setWeather("venteux");
+        break;
+      case 'rainy':
+        setWeather("pluvieux, prenez un parapluie");
+        break;
+      default :
+        setWeather("inconnu");
+        break;
+    }
+  }
+
+  function localize(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition((position) => {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        console.log(latitude + " " + longitude);
+        fetch("https://jb03dcnv74.execute-api.eu-west-1.amazonaws.com/Prod/geo?lon="+longitude+"lat="+latitude)
+        .then((response) => response.json())
+        .then((json) => setCity(json))
+        .catch((error) => console.error(error));
+        searchWeather(city.city);
+      },
+      (err) => console.log(err)
+      );
+    }
+  }
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input onKeyDown={handleInput} type="text" id="task" placeholder='Rechercher une ville' ref={inputRef}/>
+        <button onClick={localize}>Me localiser</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-        <p>Elon Musk is better than Trump</p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {data ? 
+      (<div className="card">
+        <h3>Météo à {data.city}</h3>
+        <hr />
+        <span style={{fontSize:"large"}}><strong>{data.temperature}°C</strong></span>
+        <p>Le temps est {weather}</p>
+      </div>)
+      : 
+        (<div className="card">
+        <h3>Aucune ville sélectionnée</h3>
+      </div>)
+      }
     </>
   )
 }
