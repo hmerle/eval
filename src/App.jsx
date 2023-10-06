@@ -26,22 +26,22 @@ function App() {
     .catch((error) => setError(true));
     switch(data.condition){
       case 'sunny':
-        setWeather("ensoleillé, sortez léger");
+        setWeather("ensoleillé, des vêtements légers sont recommandés");
         break;
       case 'cloudy':
-        setWeather("nuageux");
+        setWeather("nuageux, un gilet ou un pull peut s'avérer utile");
         break;
       case 'stormy':
-        setWeather("orageux, préparez un parapluie");
+        setWeather("orageux");
         break;
       case 'windy':
-        setWeather("venteux, prenez un manteau");
+        setWeather("venteux, un manteau est conseillé");
         break;
       case 'rainy':
         setWeather("pluvieux, prenez un parapluie");
         break;
       default :
-        setWeather("inconnu, veuillez réessayer");
+        setWeather("inconnu, veuillez réessayer dans quelques secondes");
         break;
     }
   }
