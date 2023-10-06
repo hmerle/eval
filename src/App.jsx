@@ -74,7 +74,7 @@ function App() {
       </div>
       {data ? 
       (<div>
-        <h3>Météo à {data.city}</h3>
+        <h3>Météo à <span style={{textTransform: 'capitalize'}}>{data.city}</span> · France</h3>
         <hr />
         <span style={{fontSize:"large"}}><strong>{data.temperature}°C</strong></span>
         <p>Le temps est {weather}</p>
