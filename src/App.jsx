@@ -12,6 +12,8 @@ function App() {
 
   const inputRef = useRef("");
 
+  const [error, setError] = useState(false)
+
   function handleInput(event){
     if (event.key === 'Enter' && event.target.value !== "") {
       searchWeather(event.target.value);
@@ -23,7 +25,7 @@ function App() {
     fetch("https://jb03dcnv74.execute-api.eu-west-1.amazonaws.com/Prod/weather/"+city)
     .then((response) => response.json())
     .then((json) => setData(json))
-    .catch((error) => console.error(error));
+    .catch((error) => setError(true));
     switch(data.condition){
       case 'sunny':
         setWeather("ensoleillé, sortez léger");
@@ -41,7 +43,7 @@ function App() {
         setWeather("pluvieux, prenez un parapluie");
         break;
       default :
-        setWeather("inconnu");
+        setWeather("inconnu, veuillez réessayer");
         break;
     }
   }
@@ -51,22 +53,25 @@ function App() {
       navigator.geolocation.getCurrentPosition((position) => {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        console.log(latitude + " " + longitude);
         fetch("https://jb03dcnv74.execute-api.eu-west-1.amazonaws.com/Prod/geo?lon="+longitude+"lat="+latitude)
         .then((response) => response.json())
         .then((json) => setCity(json))
         .catch((error) => console.error(error));
         searchWeather(city.city);
       },
-      (err) => console.log(err)
+      (err) => setError(true)
       );
     }
   }
 
   return (
     <>
+      <h1><strong>Météo en ligne</strong></h1>
       <div>
         <input onKeyDown={handleInput} type="text" id="task" placeholder='Rechercher une ville' ref={inputRef}/>
+        <p><i>Appuyer sur Entrée pour lancer la recherche</i></p>
+        <br />
+        <br />
         <button onClick={localize}>Me localiser</button>
       </div>
       {data ? 
@@ -81,6 +86,9 @@ function App() {
         <h3>Aucune ville sélectionnée</h3>
       </div>)
       }
+      {error ? <div>Une erreur s'est produite, merci de patienter avant de réessayer. Si l'erreur persiste, merci de contacter le support</div> : ""}
+      <br />
+      <footer>Application React réalisée par Hugo MERLE, élève en M2 à l'ISEN Nantes</footer>
     </>
   )
 }
